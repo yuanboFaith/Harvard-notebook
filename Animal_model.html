@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Animal Model</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Analytics.html">Analytics</a>
+</li>
+<li>
+  <a href="Animal_model.html">Animal model</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Animal Model</h1>
+
+</div>
+
+
+<pre class="r"><code>library(tidyverse)
+library(rebus)
+library(readxl)
+library(RColorBrewer)
+library(gridExtra)
+library(cowplot)
+library(broom)
+library(ggpubr)
+
+
+# theme
+theme_set(theme_bw() +
+            theme(strip.background = element_blank(),
+                  axis.text = element_text(color = &quot;black&quot;, size = 13),
+                  axis.title = element_text(color = &quot;black&quot;, size = 13, face = &quot;bold&quot;),
+                  strip.text = element_text(face = &quot;bold&quot;, size = 13),
+                  panel.grid = element_blank(),
+                  legend.title = element_text(size = 13),
+                  legend.text = element_text(size = 13)))
+
+
+
+# significant notation
+# single value
+sigStar =function(x){
+  if (x &gt; 0.05){ star = &quot; &quot;} else{
+    if (x&gt;= 0.01) { star = &quot;*&quot;} else {
+      if (x &gt;= 0.001) { star = &quot;**&quot;} else { 
+        if (x &gt;= 0.0001) { star = &quot;***&quot; } else {
+          star = &quot;****&quot;
+        }  
+      }
+    }
+  }
+  return(star)
+}
+
+# multiple values in a single vector
+sigStarS = function(vector){
+  output = c()
+  for (a in vector) {
+    output = append(output, sigStar(a))
+  }
+  return(output)
+}</code></pre>
+<p><br />
+<br />
+</p>
+<div id="oct-nov-2020-llc-model-trial-1" class="section level1">
+<h1>Oct-Nov 2020 LLC model trial 1</h1>
+<pre class="r"><code># food intake -&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;-
+path = &quot;/Users/Boyuan/Desktop/Harvard/Research/mice data.xlsx&quot;
+
+d.foodIntake = read_excel(path, sheet = &quot;food intake&quot;, range = &quot;A30:AB49&quot;)
+
+# filter out mice #1, #7 and #9 which developed ulceration
+d.foodIntake = d.foodIntake %&gt;% filter(!mice %in% c(1, 7, 9))
+
+d.foodIntake.tidy = d.foodIntake %&gt;%  select(-c(`-6D`, `-5D`)) %&gt;%
+  gather(-c(mice, treatment), key = days, value = foodIntake) %&gt;%
+  mutate(foodIntake = foodIntake %&gt;% as.numeric(),
+         days = days %&gt;% str_remove(&quot;D&quot;) %&gt;% as.numeric())
+
+d.foodIntake.summary = d.foodIntake.tidy %&gt;%
+  group_by(treatment, days) %&gt;%
+  summarise(foodIntake.mean = mean(foodIntake, na.rm = T),
+            foodIntake.sd = sd(foodIntake, na.rm = T))
+
+
+
+# version 1
+plt.dailyFoodIntake.1 = d.foodIntake.tidy[complete.cases(d.foodIntake.tidy), ] %&gt;%
+  ggplot(aes(x = days, y = foodIntake, color = treatment)) +
+  geom_line(aes(group = mice), alpha = .5,
+            position = position_dodge(0)) +
+  # geom_point() +
+  
+  # overall trend
+  geom_line(data = d.foodIntake.summary, 
+            aes(color = treatment, y = foodIntake.mean), 
+            size = 3) +
+  geom_point(data = d.foodIntake.summary, 
+             aes(color = treatment, y = foodIntake.mean), 
+             size = 4, shape = 21, stroke = 1, fill = &quot;white&quot;) +
+  scale_color_brewer(palette = &quot;Set1&quot;) +
+  scale_fill_brewer(palette = &quot;Set1&quot;) +
+  labs(x = &quot;Days&quot;, y = &quot;Daily food intake (g)&quot;, 
+       caption = &quot;1~4 million LLC cells (in 200 uL saline) injected at 0-day&quot;) +
+  
+  # add p value
+  geom_segment(x = 19, xend = 19, y = 5, yend = 4.6, 
+               arrow = arrow(length = unit(.02, &quot;npc&quot;), type = &quot;closed&quot;), 
+               color = &quot;black&quot;) +
+  annotate(&quot;text&quot;, x = 18, y = 5.2, label = &quot;p = 0.18&quot;)+
+  
+  # add tumor injection label
+  geom_segment(x = 0, xend = 0, y = 1.5, yend = 2.3, 
+               arrow = arrow(length = unit(.02, &quot;npc&quot;), type = &quot;closed&quot;), 
+               color = &quot;black&quot;) +
+  annotate(&quot;text&quot;, x = 0, y = 1.2, label = &quot;LLC injection&quot;, size = 5)+
+  
+  scale_y_continuous(limits = c(1, 6.5),
+                     breaks = seq(2, 6, by = 1))
+
+# plt.dailyFoodIntake.1
+
+
+# version 2 
+plt.dailyFoodIntake.2 = d.foodIntake.summary %&gt;%
+  ggplot(aes(x = days, y = foodIntake.mean, color = treatment, fill = treatment)) +
+  
+  # 1 std range
+  geom_ribbon( aes(ymin = foodIntake.mean - foodIntake.sd, 
+                   ymax = foodIntake.mean + foodIntake.sd, x = days), 
+               alpha = .2, size = .1) +
+  
+  # 2 std range
+  geom_ribbon( aes(ymin = foodIntake.mean - foodIntake.sd * 2, 
+                   ymax = foodIntake.mean + foodIntake.sd * 2, x = days), 
+               alpha = 0, lty = &quot;dashed&quot;) +
+  
+  geom_line(size = 3) +
+  geom_point(shape = 21, fill = &quot;white&quot;, size = 4, stroke = 1) +
+  
+  scale_color_brewer(palette = &quot;Set1&quot;) +
+  scale_fill_brewer(palette = &quot;Set1&quot;) +
+  labs(x = &quot;Days&quot;, y = &quot;Daily food intake (g)&quot;, 
+       caption = &quot;1~4 million LLC cells (in 200 uL saline) injected at 0-day&quot;) +
+  # add p value
+  geom_segment(x = 19, xend = 19, y = 5, yend = 4.6, 
+               arrow = arrow(length = unit(.02, &quot;npc&quot;), type = &quot;closed&quot;), 
+               color = &quot;black&quot;) +
+  annotate(&quot;text&quot;, x = 18, y = 5.2, label = &quot;p = 0.18&quot;) +
+  scale_y_continuous(limits = c(1, 6.5),
+                     breaks = seq(2, 6, by = 1)) +
+  # add tumor injection label
+  geom_segment(x = 0, xend = 0, y = 1.5, yend = 2.3, 
+               arrow = arrow(length = unit(.02, &quot;npc&quot;), type = &quot;closed&quot;), 
+               color = &quot;black&quot;) +
+  annotate(&quot;text&quot;, x = 0, y = 1.2, label = &quot;LLC injection&quot;, size = 5)
+
+# plt.dailyFoodIntake.2</code></pre>
+<pre class="r"><code>plt.dailyFoodIntake = 
+  plot_grid(plt.dailyFoodIntake.1, plt.dailyFoodIntake.2, nrow = 1)
+plt.dailyFoodIntake</code></pre>
+<p><img src="Animal_model_files/figure-html/unnamed-chunk-3-1.png" width="1344" /></p>
+<pre class="r"><code># do t-test
+hh = d.foodIntake.tidy %&gt;% filter(days == 19)
+t.test(hh$foodIntake ~ hh$treatment, var.equal = T)</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  hh$foodIntake by hh$treatment
+## t = -1.3868, df = 14, p-value = 0.1872
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.7801253  0.1674269
+## sample estimates:
+##    mean in group LLC mean in group Saline 
+##             3.071429             3.377778</code></pre>
+<pre class="r"><code># accumulated food intake
+d.foodIntake.tidy.missing.replaced =  
+  d.foodIntake.tidy%&gt;%
+  filter(days &gt;=0) %&gt;% # count from the zero day of tumor injection
+  group_by(days, treatment) %&gt;%
+  # replace missing value with the average for treatment-day group
+  mutate(foodIntake = replace_na(foodIntake, replace = mean(foodIntake, na.rm = T)))
+
+
+d.foodIntake.accumulated.tidy = d.foodIntake.tidy.missing.replaced %&gt;%
+  group_by(treatment, mice) %&gt;%
+  summarise(foodIntake.accumulated = sum(foodIntake)) 
+
+d.foodIntake.accumulated.summary = 
+  d.foodIntake.accumulated.tidy %&gt;%
+  group_by(treatment) %&gt;%
+  summarise(foodIntake.accumulated.mean = mean(foodIntake.accumulated),
+            foodIntake.accumulated.sd = sd(foodIntake.accumulated))</code></pre>
+<pre class="r"><code>d.foodIntake.accumulated.summary %&gt;%
+  ggplot(aes(x = treatment, y = foodIntake.accumulated.mean, color = treatment, fill = treatment)) +
+  geom_bar(stat = &quot;identity&quot;, alpha = .6, size = 1)  +
+  geom_errorbar(aes(ymin = foodIntake.accumulated.mean - foodIntake.accumulated.sd,
+                    ymax = foodIntake.accumulated.mean + foodIntake.accumulated.sd),
+                width = .5, size = 1) +
+  
+  # geom_point(data = d.foodIntake.accumulated.tidy,
+  #            aes(y = foodIntake.accumulated), 
+  #            shape = 21, fill = &quot;white&quot;, size = 3,stroke = 1, position = position_jitter(.2, 0)) +
+  
+  geom_label(data = d.foodIntake.accumulated.tidy,
+             aes(y = foodIntake.accumulated, label = mice), 
+             size = 4, fill = &quot;white&quot;, fontface = &quot;bold&quot;, position = position_jitter(.3, 0)) +
+  
+  labs(y = &quot;Accumulated food intake (g) over 19 days since LLC injection&quot;) +
+  scale_y_continuous(breaks = seq(0, 100, 20))</code></pre>
+<p><img src="Animal_model_files/figure-html/unnamed-chunk-6-1.png" width="768" /></p>
+<pre class="r"><code># Body weight -&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;--&lt;&gt;-
+d.bodyWeight = read_excel(path, sheet = &quot;body weight&quot;, range = &quot;A2:AL24&quot;)
+
+# filter out mice #1, #7 and #9 which developed ulceration
+d.bodyWeight = d.bodyWeight %&gt;% filter(!mice %in% c(1, 7, 9))
+
+# tidy up
+d.bodyWeight.tidy = d.bodyWeight %&gt;%
+  gather(-c(mice, treatment), key = days, value = bodyWeight) %&gt;%
+  mutate(days = days %&gt;% str_remove(&quot;D&quot;) %&gt;% as.integer(),
+         bodyWeight = bodyWeight %&gt;% as.numeric()) 
+
+d.bodyWeight.tidy = d.bodyWeight.tidy %&gt;% filter(days &gt;= -5)
+
+# summary
+d.bodyWeight.tidy.summary = d.bodyWeight.tidy %&gt;%
+  group_by(days, treatment) %&gt;%
+  summarise(bodyWeight.mean = mean(bodyWeight, na.rm = T),
+            bodyWeight.sd = sd(bodyWeight, na.rm = T))
+
+d.bodyWeight.tidy.summary = 
+  d.bodyWeight.tidy.summary[d.bodyWeight.tidy.summary %&gt;% complete.cases(), ]
+
+
+# plot
+# version 1
+d.bodyWeight.tidy = d.bodyWeight.tidy[d.bodyWeight.tidy %&gt;% complete.cases(), ]
+
+plt.bodyweight.1 = d.bodyWeight.tidy %&gt;%
+  ggplot(aes(x = days, y = bodyWeight, color = treatment, fill = treatment)) +
+  geom_line(aes(group = mice), alpha = .5) +
+  
+  # overal trend
+  geom_line(data = d.bodyWeight.tidy.summary, 
+            aes(x = days, y = bodyWeight.mean), 
+            size = 4) +
+  geom_point(data = d.bodyWeight.tidy.summary, 
+             aes(x = days, y = bodyWeight.mean), 
+             shape = 21, fill = &quot;white&quot;, size = 5, stroke = 1) +
+  scale_color_brewer(palette = &quot;Set1&quot;) +
+  scale_fill_brewer(palette = &quot;Set1&quot;) +
+  labs(x = &quot;Days&quot;, y =&quot;Body weight (g)&quot;, 
+       caption = &quot;1~4 million LLC cells (in 200 uL saline) injected at 0-day&quot;)
+# plt.bodyweight.1
+
+
+# version 2
+plt.bodyweight.2 = d.bodyWeight.tidy.summary %&gt;%
+  ggplot(aes(x = days, y = bodyWeight.mean, color = treatment, fill = treatment)) +
+  
+  # 1 std range
+  geom_ribbon(aes(ymin = bodyWeight.mean - bodyWeight.sd,
+                  ymax = bodyWeight.mean + bodyWeight.sd),
+              alpha = .2, size = .1) +
+  # 2 std range
+  geom_ribbon(aes(ymin = bodyWeight.mean - 2 * bodyWeight.sd,
+                  ymax = bodyWeight.mean + 2 * bodyWeight.sd),
+              alpha = 0, lty = &quot;dashed&quot;) +
+  
+  # trend line
+  geom_line(size = 2) +
+  geom_point(shape = 21, fill = &quot;white&quot;, size = 4, stroke = 1) +
+  
+  scale_color_brewer(palette = &quot;Set1&quot;) +
+  scale_fill_brewer(palette = &quot;Set1&quot;) +
+  labs(x = &quot;Days&quot;, y =&quot;Body weight (g)&quot;, 
+       caption = &quot;1~4 million LLC cells (in 200 uL saline) injected at 0-day&quot;)
+# plt.bodyweight.2</code></pre>
+<pre class="r"><code>plt.bodyweight = plot_grid(plt.bodyweight.1, plt.bodyweight.2, nrow = 1)
+plt.bodyweight</code></pre>
+<p><img src="Animal_model_files/figure-html/unnamed-chunk-8-1.png" width="1344" /></p>
+<pre class="r"><code># combine tumor weight and food intake
+d.all.tidy = d.foodIntake.tidy %&gt;% 
+  left_join(d.bodyWeight.tidy, by = c(&quot;mice&quot;, &quot;days&quot;, &quot;treatment&quot;)) %&gt;%
+  mutate(foodIntake.per25gBodyWeight = foodIntake/bodyWeight * 25)
+
+# normalized food intake
+d.normalizedFoodIntake = d.all.tidy %&gt;% group_by(treatment, days) %&gt;% 
+  summarise(foodIntake.per25gBodyWeight.mean = mean(foodIntake.per25gBodyWeight, na.rm = T),
+            foodIntake.per25gBodyWeight.sd = sd(foodIntake.per25gBodyWeight, na.rm = T)) 
+
+# combine food intake, weight, and body-weight normalized food intake summary data
+d.all.summary = d.foodIntake.summary %&gt;% 
+  left_join(d.bodyWeight.tidy.summary, by = c(&quot;treatment&quot;, &quot;days&quot;)) %&gt;%
+  left_join(d.normalizedFoodIntake, by = c(&quot;treatment&quot;, &quot;days&quot;))
+
+
+## plot body weight-normalized food intake
+# Version 1
+plt.dailyFoodIntake.Normalized.1 = 
+  d.all.tidy[complete.cases(d.all.tidy), ] %&gt;%
+  ggplot(aes(x = days, y = foodIntake.per25gBodyWeight, color = treatment)) +
+  geom_line(aes(group = mice), alpha = .5) +
+  scale_color_brewer(palette = &quot;Set1&quot;) +
+  scale_fill_brewer(palette = &quot;Set1&quot;) +
+  labs(x = &quot;Days&quot;, y = &quot;Normalized daily food intake / 25 g body weight&quot;) +
+  
+  geom_line(data = d.all.summary[complete.cases(d.all.summary), ], 
+            aes(group = treatment, y = foodIntake.per25gBodyWeight.mean), size = 3) +
+  geom_point(data = d.all.summary[complete.cases(d.all.summary), ], 
+             aes(group = treatment, y = foodIntake.per25gBodyWeight.mean),
+             shape = 21, fill = &quot;white&quot;, size = 4, stroke = 1) +
+  # add p value
+  geom_segment(x = 19, xend = 19, y = 4.5, yend = 4, 
+               arrow = arrow(length = unit(.02, &quot;npc&quot;), type = &quot;closed&quot;), 
+               color = &quot;black&quot;) +
+  annotate(&quot;text&quot;, x = 18, y = 4.7, label = &quot;p = 0.075&quot;)
+# plt.dailyFoodIntake.Normalized.1
+
+
+# version 2
+plt.dailyFoodIntake.Normalized.2 = 
+  d.all.summary[complete.cases(d.all.summary), ]  %&gt;%
+  ggplot(aes(x = days, y = foodIntake.per25gBodyWeight.mean, color = treatment, fill = treatment)) +
+  
+  # 1 std range
+  geom_ribbon(aes(ymin = foodIntake.per25gBodyWeight.mean - foodIntake.per25gBodyWeight.sd,
+                  ymax = foodIntake.per25gBodyWeight.mean + foodIntake.per25gBodyWeight.sd),
+              alpha = .2, size = .1) +
+  # 2 std range
+  geom_ribbon(aes(ymin = foodIntake.per25gBodyWeight.mean - 2 * foodIntake.per25gBodyWeight.sd,
+                  ymax = foodIntake.per25gBodyWeight.mean + 2 * foodIntake.per25gBodyWeight.sd),
+              alpha = 0, lty = &quot;dashed&quot;) +
+  
+  labs(x = &quot;Days&quot;, y = &quot;Normalized daily food intake / 25 g body weight&quot;) +
+  
+  # trend line
+  geom_line(size = 2) +
+  geom_point(shape = 21, fill = &quot;white&quot;, size = 4, stroke = 1) +
+  
+  scale_color_brewer(palette = &quot;Set1&quot;) +
+  scale_fill_brewer(palette = &quot;Set1&quot;) +
+  labs(x = &quot;Days&quot;, y =&quot;Normalized daily food intake / 25 g body weight&quot;) +
+  
+  # add p value
+  geom_segment(x = 19, xend = 19, y = 4.5, yend = 4, 
+               arrow = arrow(length = unit(.02, &quot;npc&quot;), type = &quot;closed&quot;), 
+               color = &quot;black&quot;) +
+  annotate(&quot;text&quot;, x = 18, y = 4.7, label = &quot;p = 0.075&quot;)
+# plt.dailyFoodIntake.Normalized.2</code></pre>
+<pre class="r"><code>plt.dailyFoodIntake.Normalized = 
+  plot_grid(plt.dailyFoodIntake.Normalized.1, 
+            plt.dailyFoodIntake.Normalized.2, 
+            nrow = 1)
+
+plt.dailyFoodIntake.Normalized</code></pre>
+<p><img src="Animal_model_files/figure-html/unnamed-chunk-10-1.png" width="1344" /></p>
+<pre class="r"><code># do statistical test
+x = d.all.tidy %&gt;% filter(days == 19)
+t.test(x$foodIntake.per25gBodyWeight ~ x$treatment, var.equal = T)</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  x$foodIntake.per25gBodyWeight by x$treatment
+## t = -1.9219, df = 14, p-value = 0.07521
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.5578991  0.0305762
+## sample estimates:
+##    mean in group LLC mean in group Saline 
+##             2.587158             2.850820</code></pre>
+<pre class="r"><code># tumor size 
+d.tumor = read_excel(path, sheet = &quot;tumor&quot;, range = &quot;A1:F21&quot;)
+d.tumor = d.tumor %&gt;% filter(!mice %in% c(7, 9)) # remove mice #7 &amp; 9 having huge ulceration
+
+
+# body composition
+d.BodyComposition = read_excel(path, sheet = &quot;body composition&quot;, range = &quot;A1:J21&quot;) %&gt;%
+  select(-c(accuracy, &#39;F.water percent&#39;, &#39;T.water percent&#39;, contains(&quot;water&quot;)))
+d.BodyComposition = d.BodyComposition %&gt;% 
+  filter(!mice %in% c(7, 9)) # remove mice #7 &amp; 9 having huge ulceration
+
+
+# combine with tumor mass
+d.BodyComposition = d.BodyComposition %&gt;% 
+  left_join(d.tumor, by = c(&quot;mice&quot;, &quot;treatment&quot;))
+
+d.BodyComposition = d.BodyComposition %&gt;%
+  mutate(
+    carcass = `body weight (g)` - `tumor mass (g)`,
+    carc.fat.pct = `fat (g)` / carcass * 100,
+    
+    lean.noTumor = `lean (g)` - `tumor mass (g)`,
+    lean.noTumor.pct = lean.noTumor / carcass * 100)
+
+
+# plot composition lean  &amp; fat with LLC vs. control
+d.BodyComposition.leanFat = d.BodyComposition %&gt;%
+  select(mice, treatment, contains(&quot;pct&quot;), `fat (g)`, lean.noTumor, carcass)
+
+d.BodyComposition.leanFat.tidy = d.BodyComposition.leanFat %&gt;%
+  gather(-c(mice, treatment), key = aspect, value = value)
+
+
+
+# summary
+d.BodyComposition.leanFat.summary = d.BodyComposition.leanFat.tidy %&gt;%
+  group_by(treatment, aspect) %&gt;%
+  summarise(value.mean = mean(value, na.rm = T), value.sd = sd(value, na.rm = T))
+
+
+# t test
+d.t.test.bodyComposition = d.BodyComposition.leanFat.tidy %&gt;%
+  group_by(aspect) %&gt;%
+  nest(-aspect) %&gt;%
+  mutate(t.test = map(data, ~t.test(value ~ treatment, data = ., var.equal = T)),
+         glanced = map(t.test, tidy)) %&gt;%
+  unnest(glanced) %&gt;% select(aspect, p.value) %&gt;%
+  mutate(stars = sigStarS(p.value))
+
+d.BodyComposition.leanFat.summary = d.BodyComposition.leanFat.summary %&gt;% 
+  left_join(d.t.test.bodyComposition)
+
+
+
+# plot
+aspects.labs = c(&quot;adipose (%)&quot;, &quot;carcass (g)&quot;, &quot;adipose (g)&quot;, &quot;lean (g)&quot;, &quot;lean (%)&quot;)
+names(aspects.labs) = d.BodyComposition.leanFat.summary$aspect %&gt;% unique()
+
+
+# absolute mass
+plt.composition.mass = d.BodyComposition.leanFat.summary %&gt;%
+  filter(!aspect %&gt;% str_detect(&quot;pct&quot;)) %&gt;%
+  
+  ggplot(aes(x = treatment, y = value.mean, color = treatment, fill = treatment)) +
+  geom_bar(stat = &quot;identity&quot;, position = position_dodge(.9), alpha = .3, size = 1) +
+  scale_color_brewer(palette = &quot;Dark2&quot;) +
+  scale_fill_brewer(palette = &quot;Dark2&quot;)  + 
+  
+  # geom_point(data = d.BodyComposition.leanFat.tidy %&gt;% filter(!aspect %&gt;% str_detect(&quot;pct&quot;)),
+  #            aes(y = value), position = position_jitterdodge(dodge.width = .9, jitter.width = .2),
+  #            shape = 21, fill = &quot;white&quot;, size = 3, stroke = 1) +
+  
+  geom_errorbar(aes(ymin = value.mean - value.sd,
+                    ymax = value.mean + value.sd), 
+                position = position_dodge(.9), width = .4, size = 1) +
+  facet_wrap(~aspect, nrow = 1, scales = &quot;free_y&quot;,
+             labeller = labeller(aspect = aspects.labs) ) +
+  labs(y = &quot;Carcass and associated tissue mass (g)&quot;) +
+  theme(legend.position = &quot;bottom&quot;)  +
+  
+  # significant stars 
+  geom_text(aes(label = stars, 
+                x = 1.5, y = c(33, 6.9, 24) %&gt;% rep(2) ),# star position manually input
+            size = 6, color = &quot;black&quot;, fontface = &quot;bold&quot;) +
+  
+  # add mice label
+  geom_text(data = d.BodyComposition.leanFat.tidy %&gt;% filter(!aspect %&gt;% str_detect(&quot;pct&quot;)),
+            aes(y = value, label = mice), size = 4, fontface = &quot;bold&quot;, # color = &quot;black&quot;,
+            position = position_jitterdodge(dodge.width = .9, jitter.width = .7))+
+  
+  # p value for carcass
+  geom_text(aes(label = paste(&quot;p = &quot;, round(p.value, 2)), 
+                x = 1.5, y = c(33, 6.9, 24) %&gt;% rep(2) ),# star position manually input
+            size = c(4, 0, 0) %&gt;% rep(2), color = &quot;black&quot;, fontface = &quot;bold&quot;) # p value for stars zero size
+
+# plt.composition.mass
+
+
+# percentage
+plt.composition.pct = 
+  d.BodyComposition.leanFat.summary %&gt;%
+  filter(aspect %&gt;% str_detect(&quot;pct&quot;)) %&gt;%
+  
+  ggplot(aes(x = treatment, y = value.mean, color = treatment, fill = treatment)) +
+  geom_bar(stat = &quot;identity&quot;, position = position_dodge(.9), alpha = .3, size = 1) +
+  scale_color_brewer(palette = &quot;Dark2&quot;) +
+  scale_fill_brewer(palette = &quot;Dark2&quot;)  +
+  
+  # geom_point(data = d.BodyComposition.leanFat.tidy %&gt;% filter(aspect %&gt;% str_detect(&quot;pct&quot;)),
+  #            aes(y = value), position = position_jitterdodge(dodge.width = .9, jitter.width = .2), 
+  #            shape = 21, fill = &quot;white&quot;, size = 3, stroke = 1) +
+  
+  geom_errorbar(aes(ymin = value.mean - value.sd,
+                    ymax = value.mean + value.sd), 
+                position = position_dodge(.9), width = .4, size = 1) +
+  
+  # add mice label
+  geom_text(data = d.BodyComposition.leanFat.tidy %&gt;% filter(aspect %&gt;% str_detect(&quot;pct&quot;)),
+            aes(y = value, label = mice), size = 4, fontface = &quot;bold&quot;, # color = &quot;black&quot;,
+            position = position_jitterdodge(dodge.width = .9, jitter.width = .7))+
+  
+  
+  facet_wrap(~aspect, nrow = 1, scales = &quot;free_y&quot;,
+             labeller = labeller(aspect = aspects.labs) ) +
+  labs(y = &quot;Tissue percentage (%) of carcass&quot;) +
+  theme(legend.position = &quot;bottom&quot;) +
+  # significant stars
+  geom_text(aes(label = stars, 
+                x = 1.5, y = c(20.5, 90, 20.5, 90)),# star position manually input
+            size = 6, color = &quot;black&quot;, fontface = &quot;bold&quot;) 
+
+# plt.composition.pct</code></pre>
+<pre class="r"><code># combine plotsyou
+plt.composition = 
+  plot_grid(plt.composition.mass, NULL, plt.composition.pct, 
+            nrow = 1, rel_widths = c(6, .5, 4)) # add null to add gap between plots
+plt.composition</code></pre>
+<p><img src="Animal_model_files/figure-html/unnamed-chunk-13-1.png" width="1344" /></p>
+<pre class="r"><code># tumor size
+d.tumor %&gt;%
+  ggplot(aes(x = `calculated vol (cm3)`, y = `tumor mass (g)`)) +
+  geom_point() +
+  coord_equal() +
+  geom_segment(aes(x = 1, xend = 2.5, y = 1, yend = 2.5))</code></pre>
+<p><img src="Animal_model_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code># body composition combine with tumor mass, showing pairwise correlation
+d.BodyComposition.leanFat = 
+  d.BodyComposition.leanFat %&gt;%
+  left_join(d.tumor %&gt;% select(mice, treatment, &#39;tumor mass (g)&#39;), 
+            by = c(&quot;mice&quot;, &quot;treatment&quot;))
+
+# plot
+color.treatment = c(&quot;#FC4E07&quot;, &quot;#00AFBB&quot;)
+names(color.treatment) = c(&quot;LLC&quot;, &quot;Saline&quot;)</code></pre>
+<pre class="r"><code>d.BodyComposition.leanFat %&gt;% select(-c(mice, treatment)) %&gt;% 
+  pairs(pch = 19, cex = 1.5, lower.panel = NULL, 
+        col = color.treatment[d.BodyComposition.leanFat$treatment])</code></pre>
+<p><img src="Animal_model_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
+<pre class="r"><code># cloer look of tumor and fat loss
+# calculate correlation
+kk = d.BodyComposition.leanFat %&gt;% filter(treatment == &quot;LLC&quot;)
+lm(kk$`fat (g)` ~ kk$`tumor mass (g)`) %&gt;% summary()</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = kk$`fat (g)` ~ kk$`tumor mass (g)`)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.5011 -0.7791 -0.0168  1.3414  1.7554 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)           3.7648     1.4986   2.512   0.0458 *
+## kk$`tumor mass (g)`  -0.6198     0.7330  -0.845   0.4303  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.629 on 6 degrees of freedom
+## Multiple R-squared:  0.1065, Adjusted R-squared:  -0.04247 
+## F-statistic: 0.7148 on 1 and 6 DF,  p-value: 0.4303</code></pre>
+<pre class="r"><code>lm(kk$carc.fat.pct ~ kk$`tumor mass (g)`) %&gt;% summary()</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = kk$carc.fat.pct ~ kk$`tumor mass (g)`)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -9.1528 -2.3596  0.6435  4.7547  4.9327 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)           13.222      5.142   2.571   0.0423 *
+## kk$`tumor mass (g)`   -2.037      2.515  -0.810   0.4490  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.588 on 6 degrees of freedom
+## Multiple R-squared:  0.09852,    Adjusted R-squared:  -0.05172 
+## F-statistic: 0.6557 on 1 and 6 DF,  p-value: 0.449</code></pre>
+<pre class="r"><code>lm(kk$carcass ~ kk$`tumor mass (g)`) %&gt;% summary()</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = kk$carcass ~ kk$`tumor mass (g)`)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -2.518 -1.467 -1.099  1.424  3.777 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           30.842      2.366  13.034 1.26e-05 ***
+## kk$`tumor mass (g)`   -1.777      1.157  -1.535    0.176    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.571 on 6 degrees of freedom
+## Multiple R-squared:  0.2821, Adjusted R-squared:  0.1624 
+## F-statistic: 2.357 on 1 and 6 DF,  p-value: 0.1756</code></pre>
+<pre class="r"><code># plot fat mass
+plt.fat.tumor.1 = d.BodyComposition.leanFat %&gt;%
+  ggplot(aes(x = `tumor mass (g)`, y = `fat (g)`, color = treatment)) +
+  geom_label(size = 4, aes(label = mice), fontface = &quot;bold&quot;) +
+  
+  geom_smooth(data = kk, method = &quot;lm&quot;, se = F) +
+  annotate(geom = &quot;text&quot;, x = 2, y = 1, label = &quot;slope = -0.62\np = 0.43,  R2 = 0.11&quot;, 
+           fontface = &quot;bold&quot;, color = &quot;firebrick&quot;)
+# plt.fat.tumor.1
+
+
+# plot fat percentage
+plt.fat.tumor.2 = d.BodyComposition.leanFat %&gt;%
+  ggplot(aes(x = `tumor mass (g)`, y = carc.fat.pct, color = treatment)) +
+  geom_label(size = 4, aes(label = mice), fontface = &quot;bold&quot;) +
+  
+  geom_smooth(data = kk, method = &quot;lm&quot;, se = F) +
+  annotate(geom = &quot;text&quot;, x = 2, y = 4, label = &quot;slope = -2.04\np = 0.45,  R2 = 0.10&quot;, 
+           fontface = &quot;bold&quot;, color = &quot;firebrick&quot;) +
+  labs(y = &quot;Fat percentage (%) in carcass&quot;) 
+# plt.fat.tumor.2</code></pre>
+<pre class="r"><code>plot_grid(plt.fat.tumor.1, NULL, plt.fat.tumor.2, nrow = 1, rel_widths = c(4, .5, 4))</code></pre>
+<p><img src="Animal_model_files/figure-html/unnamed-chunk-18-1.png" width="864" /></p>
+<pre class="r"><code># tumor vs. carcass
+d.BodyComposition.leanFat %&gt;%
+  ggplot(aes(x = `tumor mass (g)`, y = carcass, color = treatment)) +
+  geom_label(size = 4, aes(label = mice), fontface = &quot;bold&quot;) +
+  coord_equal()</code></pre>
+<p><img src="Animal_model_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<pre class="r"><code># surgery time
+d.surgery = read_excel(path, sheet = &quot;surgery time&quot;)
+d.surgery$mice = d.surgery$mice %&gt;% factor(levels = d.surgery$mice, ordered = T)
+
+d.surgery %&gt;%
+  ggplot(aes(x = mice, y = `Total time (min)`, color = treatment, fill = treatment, shape = Ulcer)) +
+  
+  geom_segment(x = 15, xend = 15, y = 7, yend = 12, color = &quot;black&quot;, lty = &quot;dashed&quot; ) +
+  
+  geom_line(aes(group = 1)) +
+  geom_point(size = 8, stroke = 3)  +
+  scale_shape_manual(values = c(T = 1, F= 21)) +
+  guides(shape = F) +
+  labs(x = &quot;Mouse label&quot;, y = &quot;Surgery time (min) of tissue collection&quot;) +
+  scale_y_continuous(breaks = seq(5, 12, 1)) +
+  theme(panel.grid.major.y = element_line(size = .1)) +
+  
+  annotate(geom = &quot;text&quot;, x = 12, y = 11, label = &quot;1st day surgery&quot;, fontface = &quot;bold&quot;, size = 6) +
+  annotate(geom = &quot;text&quot;, x = 18, y = 11, label = &quot;2nd day surgery&quot;, fontface = &quot;bold&quot;, size = 6)  +
+  labs(caption = &quot;Empty circles for mouse having ulceraton (surgery as practice)&quot;)</code></pre>
+<p><img src="Animal_model_files/figure-html/unnamed-chunk-20-1.png" width="1152" /></p>
+<p><strong>Surgery getting faster</strong></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

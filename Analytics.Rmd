@@ -21,6 +21,8 @@ theme_set(theme_bw() +
 
 ```
 
+\
+\
 
 # Nov 9~13 2020 two sequence LCMS stability test
 ```{r, message=F, warning=FALSE, error=F}
@@ -45,7 +47,7 @@ d.tracker.summary = d.tracker %>%
          overalErrorPercentage = sd(peakArea)/mean(peakArea) * 100)
 
 d.tracker$compound %>% n_distinct()
-plt.tracjer.1 = 
+plt.tracter.1 = 
   d.tracker %>%
   # filter(compound == "Serine") %>%
   ggplot(aes(x = elapse.hour, y = peakArea.norm, color = compound, fill = compound)) +
@@ -74,8 +76,8 @@ plt.tracjer.1 =
 
 
 
-```{r, message=F, warning=FALSE, error=F, fig.width=16, fig.height=18}
-plt.tracjer.1
+```{r, message=F, warning=FALSE, error=F, fig.width=20, fig.height=20}
+plt.tracter.1
 ```
 
 

@@ -6,6 +6,6 @@ navbar:
       href: index.html
     - text: "Analytics"
       href: Analytics.html
-    - text: "Analytics"
-      href: Analytics.html
+    - text: "Animal model"
+      href: Animal_model.html
 output_dir: "."
