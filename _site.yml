@@ -1,0 +1,9 @@
+name: ""
+navbar:
+  title: ""
+  left:
+    - text: "Analytics"
+      href: Analytics.html
+    - text: "Analytics"
+      href: Analytics.html
+output_dir: "."
