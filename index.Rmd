@@ -1,0 +1,14 @@
+---
+title:   
+output: 
+  html_document:
+    css: cover.css
+---
+
+<br><br><br><br><br><br><br><br><br><br>
+
+<h2 style = "color:white; text-align:center; "> Bo Yuan's Harvard Notebook</h1>
+
+
+<br><br>
+

@@ -2,6 +2,8 @@ name: ""
 navbar:
   title: ""
   left:
+    - text: "Home"
+      href: index.html
     - text: "Analytics"
       href: Analytics.html
     - text: "Analytics"
